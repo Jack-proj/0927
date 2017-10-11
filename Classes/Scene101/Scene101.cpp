@@ -39,7 +39,10 @@ bool Scene101::init()
 	this->addChild(bkimage, 0);
 
 	// 自行增加 sprite 將 bean01.png 到螢幕正中間
-
+	_bean = Sprite::create("scene101/bean1_01.png");  // 使用 create 函式,給予檔名即可
+	_bean->setPosition(Vec2(330,593)); // 位置通常放置在螢幕正中間
+	_bean->setScale(2);
+	this->addChild(_bean, 0);
 
 	// create and initialize a label, add a label shows "Scene 101"
 	auto label = Label::createWithTTF("Scene 101", "fonts/Marker Felt.ttf", 32);
@@ -53,7 +56,7 @@ bool Scene101::init()
 	strcpy(this->_cSceneNo, "Scene 101");
 
 	//一般(非中文字)文字的顯示方式
-	auto label1 = Label::createWithBMFont("fonts/couriernew32.fnt", "Scene 101");
+	auto label1 = Label::createWithBMFont("fonts/bbb.fnt", "aaa");
 	size = label1->getContentSize();
 	label1->setColor(Color3B::WHITE);
 	label1->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - size.height));
@@ -63,8 +66,8 @@ bool Scene101::init()
 	auto strings = FileUtils::getInstance()->getValueMapFromFile("scene101/strings.xml");
 	std::string str1 = strings["chinese1"].asString();
 	std::string str2 = strings["chinese2"].asString();
-	auto label2 = Label::createWithBMFont("fonts/hansans48.fnt", str1);
-	auto label3 = Label::createWithBMFont("fonts/hansans48.fnt", str2);
+	auto label2 = Label::createWithBMFont("fonts/aaa.fnt", str1);
+	auto label3 = Label::createWithBMFont("fonts/aaa.fnt", str2);
 	size = label2->getContentSize();
 	label2->setColor(Color3B(255, 238, 217));
 	label2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 80 - size.height));
@@ -112,7 +115,15 @@ bool Scene101::init()
 
 void Scene101::doStep(float dt)  // OnFrameMove
 {
-
+	if (_bTouched) {
+		_felaptime += dt;
+		_fangle = _felaptime * 180;
+		_bean->setRotation(_fangle);
+		if (_fangle >= 360) {
+			_felaptime = 0;
+			_bTouched = false;
+		}
+	}
 }
 
 bool  Scene101::onTouchBegan(cocos2d::Touch *pTouch, cocos2d::Event *pEvent)//觸碰開始事件
@@ -128,6 +139,7 @@ bool  Scene101::onTouchBegan(cocos2d::Touch *pTouch, cocos2d::Event *pEvent)//�
 		unscheduleAllCallbacks();
 		Director::getInstance()->end();
 	}
+	_bTouched = !_bTouched;
 
 	return true;
 }
