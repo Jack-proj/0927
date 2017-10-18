@@ -9,6 +9,8 @@
 
 USING_NS_CC;
 
+cocos2d::Size fSize;
+
 static cocos2d::Size screenResolutionSize = cocos2d::Size(1920, 1080);
 static cocos2d::Size designResolutionSize = cocos2d::Size(1280, 720);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
@@ -19,7 +21,7 @@ AppDelegate::AppDelegate() {
 
 }
 
-AppDelegate::~AppDelegate() 
+AppDelegate::~AppDelegate()
 {
 }
 
@@ -27,52 +29,53 @@ AppDelegate::~AppDelegate()
 //it will takes effect on all platforms
 void AppDelegate::initGLContextAttrs()
 {
-    //set OpenGL context attributions,now can only set six attributions:
-    //red,green,blue,alpha,depth,stencil
-    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
+	//set OpenGL context attributions,now can only set six attributions:
+	//red,green,blue,alpha,depth,stencil
+	GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8 };
 
-    GLView::setGLContextAttrs(glContextAttrs);
+	GLView::setGLContextAttrs(glContextAttrs);
 }
 
 // If you want to use packages manager to install more packages, 
 // don't modify or remove this function
 static int register_all_packages()
 {
-    return 0; //flag for packages manager
+	return 0; //flag for packages manager
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
-    // initialize director
-    auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if(!glview) {
+	// initialize director
+	auto director = Director::getInstance();
+	auto glview = director->getOpenGLView();
+	if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("MyCocos2DX", Rect(0, 0, screenResolutionSize.width, screenResolutionSize.height),0.5f);
+		glview = GLViewImpl::createWithRect("MyCocos2DX", Rect(0, 0, screenResolutionSize.width, screenResolutionSize.height), 0.5f);
 #else
-        glview = GLViewImpl::create("MyCocos2DX");
+		glview = GLViewImpl::create("MyCocos2DX");
 #endif
-        director->setOpenGLView(glview);
-    }
+		director->setOpenGLView(glview);
+	}
 
-    // turn on display FPS
-    director->setDisplayStats(true);
+	// turn on display FPS
+	director->setDisplayStats(true);
 
-    // set FPS. the default value is 1.0/60 if you don't call this
-    director->setAnimationInterval(1.0f / 60.0f);
+	// set FPS. the default value is 1.0/60 if you don't call this
+	director->setAnimationInterval(1.0f / 60.0f);
 
-    // Set the design resolution
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
-    Size frameSize = glview->getFrameSize();
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-//	director->setContentScaleFactor(MIN(screenResolutionSize.height / designResolutionSize.height, screenResolutionSize.width / designResolutionSize.width));
-//#else
-//	director->setContentScaleFactor(MIN(frameSize.height / designResolutionSize.height, frameSize.width / designResolutionSize.width));
-//#endif
-//	g_fScaleFactor = Director::getInstance()->getContentScaleFactor();
+	// Set the design resolution
+	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
+	Size frameSize = glview->getFrameSize();
+	fSize = frameSize;
+	//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+	//	director->setContentScaleFactor(MIN(screenResolutionSize.height / designResolutionSize.height, screenResolutionSize.width / designResolutionSize.width));
+	//#else
+	//	director->setContentScaleFactor(MIN(frameSize.height / designResolutionSize.height, frameSize.width / designResolutionSize.width));
+	//#endif
+	//	g_fScaleFactor = Director::getInstance()->getContentScaleFactor();
 
-    register_all_packages();
+	register_all_packages();
 
-    // create a scene. it's an autorelease object
+	// create a scene. it's an autorelease object
 
 #if SceneTransition == 1
 	auto scene = Scene101::createScene();
@@ -82,22 +85,22 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	director->runWithScene(scene);
 #endif
 
-//	Director::getInstance()->replaceScene(scene);
-    return true;
+	//	Director::getInstance()->replaceScene(scene);
+	return true;
 }
 
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground() {
-    Director::getInstance()->stopAnimation();
+	Director::getInstance()->stopAnimation();
 
-    // if you use SimpleAudioEngine, it must be pause
-    // SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	// if you use SimpleAudioEngine, it must be pause
+	// SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
-    Director::getInstance()->startAnimation();
+	Director::getInstance()->startAnimation();
 
-    // if you use SimpleAudioEngine, it must resume here
-    // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+	// if you use SimpleAudioEngine, it must resume here
+	// SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }
